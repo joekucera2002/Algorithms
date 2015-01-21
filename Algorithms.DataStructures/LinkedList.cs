@@ -1,4 +1,5 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 
 namespace Algorithms.DataStructures
@@ -83,16 +84,57 @@ namespace Algorithms.DataStructures
             get { throw new System.NotImplementedException(); }
         }
 
-        public bool Remove(T item)
+        /// <summary>
+        /// Removes the first node in the list which equals the provided value.
+        /// </summary>
+        /// <param name="item">The item value to remove.</param>
+        /// <returns>True if the item was removed, false otherwise.</returns>
+        /// <remarks>Performance: O(n)</remarks>
+        public Boolean Remove(T item)
         {
             LinkedListNode<T> previous = null;
             LinkedListNode<T> current = _head;
 
-            // 1) Empty list: Do nothing
+            // 1) Empty list:   Do nothing
+            // 2) Single node : Previous is null
+            // 3) Many Nodes:
+            //      a) Node to remove is the first node
+            //      b) Node to remove is middle or last
 
             while (current != null)
             {
-                
+                if (current.Value.Equals(item))
+                {
+                    if (previous != null)
+                    {
+                        // Case 3b
+                        previous.Next = current.Next;
+
+                        if (current.Next == null)
+                        {
+                            _tail = previous;
+                        }
+                    }
+                    else
+                    {
+                        // Case 2, 3a
+
+                        _head = current.Next;
+
+                        if (_head == null)
+                        {
+                            // List is empty
+                            _tail = null;
+                        }
+                    }
+
+                    Count--;
+
+                    return true;
+                }
+
+                previous = current;
+                current = current.Next;
             }
 
             return false;
