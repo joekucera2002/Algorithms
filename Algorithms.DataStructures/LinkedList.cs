@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Algorithms.DataStructures
@@ -58,30 +59,77 @@ namespace Algorithms.DataStructures
             Count++;
         }
 
+        /// <summary>
+        /// Clears the linked list.
+        /// </summary>
+        /// <remarks>Performance: O(1)</remarks>
         public void Clear()
         {
-            throw new System.NotImplementedException();
+            _head = null;
+            _tail = null;
+
+            Count = 0;
         }
 
-        public bool Contains(T item)
+        /// <summary>
+        /// Gets a value indicating whether the provided value exists within the linked list.
+        /// </summary>
+        /// <param name="item">The item to find.</param>
+        /// <returns>True if the item exists, false otherwise.</returns>
+        /// <remarks>Performance: O(n)</remarks>
+        public Boolean Contains(T item)
         {
-            throw new System.NotImplementedException();
+            LinkedListNode<T> current = _head;
+
+            while (current != null)
+            {
+                if (current.Value.Equals(item))
+                {
+                    return true;
+                }
+
+                current = current.Next;
+            }
+
+            return false;
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
+        /// <summary>
+        /// Copies the contents of the linked list to the supplied array beginning at the specified index.
+        /// </summary>
+        /// <param name="array">The target array.</param>
+        /// <param name="arrayIndex">The starting index.</param>
+        /// <remarks>Performance: O(n).
+        /// It is the responsibility of the caller to provide an array which has enough capacity to contain all 
+        /// of the items in the linked list.
+        /// </remarks>
+        public void CopyTo(T[] array, Int32 arrayIndex)
         {
-            throw new System.NotImplementedException();
+            LinkedListNode<T> currentNode = _head;
+            Int32 index = arrayIndex;
+
+            while (currentNode != null)
+            {
+                array[index] = currentNode.Value;
+
+                currentNode = currentNode.Next;
+                index++;
+            }
         }
 
-        public int Count
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
+        /// <summary>
+        /// Gets the number of items currently in the linked list.
+        /// </summary>
+        /// <remarks>Performance: O(1)</remarks>
+        public Int32 Count { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether the linked list is read only.
+        /// </summary>
+        /// <remarks>Performance: O(1)</remarks>
         public bool IsReadOnly
         {
-            get { throw new System.NotImplementedException(); }
+            get { return false; }
         }
 
         /// <summary>
@@ -144,18 +192,37 @@ namespace Algorithms.DataStructures
 
         #region IEnumerable<T> Members
 
+        /// <summary>
+        /// Gets an enumerator that allows enumeration of the linked list from first to last.
+        /// </summary>
+        /// <returns>The enumerator instance.</returns>
+        /// <remarks>Performance: O(1) - Returning enumerator, O(n) - enumerating each item.</remarks>
         public IEnumerator<T> GetEnumerator()
         {
-            throw new System.NotImplementedException();
+            LinkedListNode<T> current = _head;
+
+            while (current != null)
+            {
+                yield return current.Value;
+
+                current = current.Next;
+            }
         }
 
         #endregion
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        /// <summary>
+        /// Gets an enumerator that allows enumeration of the linked list from first to last.
+        /// </summary>
+        /// <returns>The enumerator instance.</returns>
+        /// <remarks>Performance: O(1) - Returning enumerator, O(n) - enumerating each item.</remarks>
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new System.NotImplementedException();
+            IEnumerable<T> thisEnumerable = (IEnumerable<T>) this;
+
+            return thisEnumerable.GetEnumerator();
         }
 
         #endregion

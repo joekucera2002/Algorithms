@@ -40,7 +40,8 @@ namespace Algorithms.DataStructures.Tests
             //      1. Item was added (should be tail)
             //      2. Head != tail
             list.Count.Should().Be(2);
-            list.Last.Should().Be(2);
+            list.Last.Should().NotBeNull();
+            list.Last.Value.Should().Be(2);
             list.First.Next.Should().BeSameAs(list.Last);
         }
 
@@ -141,9 +142,101 @@ namespace Algorithms.DataStructures.Tests
             //      5. Last.Value = 2
             list.Count.Should().Be(3);
             list.Last.Value.Should().Be(3);
-            list.Remove(2).Should().BeTrue();
+            list.Remove(3).Should().BeTrue();
             list.Count.Should().Be(2);
             list.Last.Value.Should().Be(2);
+        }
+
+        [TestMethod]
+        public void ContainsItemTest()
+        {
+            LinkedList<Int32> list = new LinkedList<Int32>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+
+            // TEST: Find an existing item in the list.
+            
+            // Evaluate:
+            //      1. Method should return true (item found)
+            list.Contains(2).Should().BeTrue();
+
+            // TEST: Try to find an item that does not exist.
+
+            // Evaluate:
+            //      1. Method shoudl return false (item not found)
+            list.Contains(4).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void EnumerateListTest()
+        {
+            LinkedList<Int32> list = new LinkedList<Int32>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+
+            // TEST: Enumeration functionality using foreach
+
+            Int32 currentItem = 1;
+
+            foreach (Int32 item in list)
+            {
+                // Evaluate
+                //      1. item value should equal currentItem
+                item.Should().Be(currentItem);
+
+                currentItem++;
+            }
+        }
+
+        [TestMethod]
+        public void ClearListTest()
+        {
+            LinkedList<Int32> list = new LinkedList<Int32>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+
+            // TEST: Clearing the list
+
+            // Evaluate:
+            //      1. First/Last != null, Count = 3
+            //      2. After clearing, First/Last = null, Count = 0
+            list.First.Should().NotBeNull();
+            list.Last.Should().NotBeNull();
+            list.Count.Should().Be(3);
+
+            list.Clear();
+
+            list.First.Should().BeNull();
+            list.Last.Should().BeNull();
+            list.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void CopyToArrayTest()
+        {
+            LinkedList<Int32> list = new LinkedList<Int32>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+            list.Add(4);
+            list.Add(5);
+
+            // TEST: Copy list to existing array.
+            Int32[] array = new Int32[10] {1, 2, 3, 5, 8, 13, 21, 34, 55, 89};
+
+            list.CopyTo(array, 5);
+
+            // Evaluate:
+            //      1. Last half of the array equals linked list values in order.
+            Int32 index = 5;
+
+            foreach (Int32 item in list)
+            {
+                array[index].Should().Be(item);
+            }
         }
     }
 }
